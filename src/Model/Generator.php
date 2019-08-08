@@ -5,7 +5,7 @@ namespace Stuifzand\TestGenerator\Model;
 class Generator
 {
     /**
-     * @param ParseInfo $info
+     * @param \Stuifzand\TestGenerator\Model\ParseInfo $info
      * @return string
      */
     public function generate(ParseInfo $info): string
@@ -50,7 +50,7 @@ class Generator
     }
 
     /**
-     * @param ParseInfo $info
+     * @param \Stuifzand\TestGenerator\Model\ParseInfo $info
      * @return string
      */
     private function getTestClassNamespace(ParseInfo $info): string
@@ -63,7 +63,7 @@ class Generator
     }
 
     /**
-     * @param $namespace
+     * @param string $namespace
      */
     private function emitNamespace($namespace): void
     {
@@ -130,7 +130,7 @@ class Generator
     }
 
     /**
-     * @param $argument
+     * @param string[] $argument
      * @return string
      */
     private function getClassMock($argument): string
@@ -151,7 +151,7 @@ class Generator
     }
 
     /**
-     * @param ParseInfo $info
+     * @param \Stuifzand\TestGenerator\Model\ParseInfo $info
      */
     private function emitObjectManagerGet(ParseInfo $info): void
     {
@@ -163,7 +163,7 @@ class Generator
     }
 
     /**
-     * @param ParseInfo $info
+     * @param \Stuifzand\TestGenerator\Model\ParseInfo $info
      */
     private function emitConstructorArgumentsAsFieldAssignments(ParseInfo $info): void
     {
@@ -173,7 +173,7 @@ class Generator
     }
 
     /**
-     * @param ParseInfo $info
+     * @param \Stuifzand\TestGenerator\Model\ParseInfo $info
      */
     private function emitConstructorArgumentsAsFields(ParseInfo $info): void
     {
