@@ -1,0 +1,20 @@
+{
+  "name": "stuifzand/module-php-test-generator",
+  "description": "Generate a unit test from a Magento class file",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "require": {
+    "phpunit/phpunit": "^6.0"
+  },
+  "authors": [
+    {
+      "name": "Peter Stuifzand",
+      "email": "peter@stuifzand.eu"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Stuifzand\\TestGenerator\\": "src/"
+    }
+  }
+}
