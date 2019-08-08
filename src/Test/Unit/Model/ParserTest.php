@@ -189,6 +189,7 @@ PHP;
         /** @var ParseInfo $info */
         $info = $this->parser->parse($classText);
         $this->assertEquals('\\Test', $info->getNamespace());
+        $this->assertEquals('Parser', $info->getShortClassName());
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
         $this->assertTrue($info->hasConstructor());
         $this->assertEquals([

@@ -26,6 +26,7 @@ class Parser
         $classIndex  = Parser::findToken($tokens, $nsIndex, count($tokens), T_CLASS);
         $stringIndex = Parser::findToken($tokens, $classIndex, count($tokens), T_STRING);
         $info->setNamespace(rtrim($ns, '\\'));
+        $info->setShortClassName($tokens[$stringIndex][1]);
         $info->setClassName($ns . $tokens[$stringIndex][1]);
 
         $constructorFound = false;

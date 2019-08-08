@@ -8,6 +8,9 @@ class ParseInfo
     private $namespace;
 
     /** @var string */
+    private $shortClassName;
+
+    /** @var string */
     private $className;
 
     /** @var array */
@@ -74,4 +77,19 @@ class ParseInfo
         $this->namespace = $namespace;
     }
 
+    /**
+     * @return string
+     */
+    public function getShortClassName(): string
+    {
+        return $this->shortClassName;
+    }
+
+    /**
+     * @param string $shortClassName
+     */
+    public function setShortClassName(string $shortClassName): void
+    {
+        $this->shortClassName = $shortClassName;
+    }
 }
