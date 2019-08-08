@@ -91,7 +91,6 @@ PHP;
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
         $this->assertTrue($info->hasConstructor());
         $this->assertEquals([], $info->getConstructorArguments());
-        $this->assertEquals('', $this->getConstructorComment());
     }
 
     public function testParser_PHPDocTwoMethods()
@@ -116,7 +115,6 @@ PHP;
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
         $this->assertTrue($info->hasConstructor());
         $this->assertEquals([], $info->getConstructorArguments());
-        $this->assertEquals('', $this->getConstructorComment());
     }
 
     public function testParser_PHPDocTwoMethods_Switched()
@@ -141,7 +139,61 @@ PHP;
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
         $this->assertTrue($info->hasConstructor());
         $this->assertEquals([], $info->getConstructorArguments());
-        $this->assertEquals('', $this->getConstructorComment());
+    }
+
+    public function testParser_PHPDocTwoMethods_OneParam()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    /**
+     * @param \Magento\Sales\Model\Order \$order
+     */
+    public function __construct(\$order) {}
+    
+    /**
+     */
+    public function method1() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
+        $this->assertEquals([
+            ['\\Magento\\Sales\\Model\\Order', 'order'],
+        ], $info->getConstructorArguments());
+    }
+
+    public function testParser_PHPDocTwoMethods_TwoParams()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    /**
+     * @param \Magento\Sales\Model\OrderFactory \$orderFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface \$orderRepository
+     */
+    public function __construct(\$orderFactory, \$repo) {}
+    
+    /**
+     */
+    public function method1() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
+        $this->assertEquals([
+            ['\\Magento\\Sales\\Model\\OrderFactory', 'orderFactory'],
+            ['\\Magento\\Sales\\Api\\OrderRepositoryInterface', 'orderRepository'],
+        ], $info->getConstructorArguments());
     }
 
     public function dataProviderClassNames()
@@ -165,11 +217,6 @@ PHP;
             ['Stuifzand\\Import4\\Model\\Api', 'Project'],
             ['Stuifzand\\Import5\\Test\\Test\\Test\\Test', 'Item'],
         ];
-    }
-
-    private function getConstructorComment()
-    {
-        return '';
     }
 }
 

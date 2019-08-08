@@ -10,9 +10,7 @@ class ParseInfo
     /** @var array */
     private $constructorArguments = [];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $constructor;
 
     /**

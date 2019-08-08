@@ -29,8 +29,15 @@ class Parser
 
         $constructorFound = false;
 
+        $parsedComment = false;
+
         $start = $classIndex + 3;
         while ($start != count($tokens)) {
+            $commentIndex = Parser::findToken($tokens, $start, count($tokens), T_DOC_COMMENT);
+            if ($commentIndex !== count($tokens)) {
+                $parsedComment = Parser::parseComment($tokens[$commentIndex][1]);
+                $start         = $commentIndex + 1;
+            }
             $publicIndex = Parser::findToken($tokens, $start, count($tokens), T_PUBLIC);
             if ($publicIndex === count($tokens)) {
                 break;
@@ -52,6 +59,9 @@ class Parser
         }
 
         $info->setConstructor($constructorFound);
+        if ($constructorFound) {
+            $info->setConstructorArguments($parsedComment === false ? [] : $parsedComment);
+        }
 
         return $info;
     }
@@ -125,6 +135,31 @@ class Parser
     private static function isTokenType(array $tokens, int $first, int $type): bool
     {
         $token = $tokens[$first];
+
         return is_array($token) && $token[0] === $type;
+    }
+
+    private static function parseComment($commentText)
+    {
+        if (preg_match('#^/\*\*#', $commentText)) {
+            $commentText = ltrim($commentText, '/**');
+        }
+        if (preg_match('#/*/$#', $commentText)) {
+            $commentText = rtrim($commentText, '*/');
+        }
+
+        $lines = preg_split('#\n+#', $commentText);
+
+        $result = [];
+
+        foreach ($lines as $line) {
+            $line = preg_replace('#^\s*\*\s+#', '', $line);
+
+            if (preg_match('#^@param\s+(\S+)\s+\$(\S+)\s*#', $line, $matches)) {
+                $result[] = [$matches[1], $matches[2]];
+            }
+        }
+
+        return $result;
     }
 }
