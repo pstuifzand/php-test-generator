@@ -24,8 +24,8 @@ class Parser
         }
 
         $classIndex = Parser::findToken($tokens, $nsIndex, count($tokens), T_CLASS);
-
         $info->setClassName($ns . $tokens[$classIndex + 2][1]);
+
         return $info;
     }
 
@@ -65,6 +65,7 @@ class Parser
             }
             $first++;
         }
+
         return $first;
     }
 
