@@ -3,6 +3,7 @@
 namespace Stuifzand\TestGenerator\Test\Unit\Model;
 
 use PHPUnit\Framework\TestCase;
+use Stuifzand\TestGenerator\Model\ParseInfo;
 use Stuifzand\TestGenerator\Model\Parser;
 
 class ParserTest extends TestCase
@@ -19,7 +20,7 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderClassNames
      */
-    public function testParserSimpleClass(string $className)
+    public function testParser_SimpleClass(string $className)
     {
         $classText = "<?php class {$className} {}";
         $info      = $this->parser->parse($classText);
@@ -31,7 +32,7 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderClassNames
      */
-    public function testParserClassWithUse(string $className)
+    public function testParser_ClassWithUse(string $className)
     {
         $classText = "<?php use Test\Test\Test; class {$className} {}";
         $info      = $this->parser->parse($classText);
@@ -44,11 +45,29 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderNamespacesAndClass
      */
-    public function testParserClassWithNamespace(string $namespace, string $className)
+    public function testParser_ClassWithNamespace(string $namespace, string $className)
     {
         $classText = "<?php namespace $namespace; class {$className} {}";
         $info      = $this->parser->parse($classText);
         $this->assertEquals('\\' . $namespace . '\\' . $className, $info->getClassName());
+    }
+
+    public function testParser_ClassEmptyConstructor()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    public function __construct() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertEquals([], $info->getConstructorArguments());
+
     }
 
     public function dataProviderClassNames()

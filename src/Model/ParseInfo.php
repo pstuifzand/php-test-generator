@@ -7,6 +7,9 @@ class ParseInfo
     /** @var string */
     private $className;
 
+    /** @var array */
+    private $constructorArguments = [];
+
     /**
      * @return string
      */
@@ -21,5 +24,21 @@ class ParseInfo
     public function setClassName(string $className): void
     {
         $this->className = $className;
+    }
+
+    /**
+     * @return array
+     */
+    public function getConstructorArguments(): array
+    {
+        return $this->constructorArguments;
+    }
+
+    /**
+     * @param array $constructorArguments
+     */
+    public function setConstructorArguments(array $constructorArguments): void
+    {
+        $this->constructorArguments = $constructorArguments;
     }
 }
