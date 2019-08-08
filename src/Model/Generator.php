@@ -13,9 +13,7 @@ class Generator
         ob_start();
         $this->beginFile();
 
-        $namespace = $this->getTestClassNamespace($info);
-
-        $this->emitNamespace($namespace);
+        $this->emitNamespace($this->getTestClassNamespace($info));
 
         $this->emitUseStatement("Magento\Framework\TestFramework\Unit\Helper\ObjectManager");
 
