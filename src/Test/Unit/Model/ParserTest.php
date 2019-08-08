@@ -67,7 +67,23 @@ PHP;
 
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
         $this->assertEquals([], $info->getConstructorArguments());
+    }
 
+    public function testParser_ClassOneArgumentConstructor()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    public function __construct(Parser \$parser) {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertCount(1, $info->getConstructorArguments());
     }
 
     public function dataProviderClassNames()

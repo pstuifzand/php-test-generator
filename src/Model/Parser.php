@@ -60,7 +60,7 @@ class Parser
     private static function findToken(array $tokens, int $first, int $last, int $type)
     {
         while ($first != $last) {
-            if (Parser::isTokenType($tokens, $first, $last, $type)) {
+            if (Parser::isTokenType($tokens, $first, $type)) {
                 break;
             }
             $first++;
@@ -71,13 +71,13 @@ class Parser
     /**
      * @param array $tokens
      * @param int $first
-     * @param int $last
      * @param int $type
      * @return bool
      */
-    private static function isTokenType(array $tokens, int $first, int $last, int $type): bool
+    private static function isTokenType(array $tokens, int $first, int $type): bool
     {
         $token = $tokens[$first];
+
         return is_array($token) && $token[0] === $type;
     }
 }
