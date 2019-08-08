@@ -5,6 +5,9 @@ namespace Stuifzand\TestGenerator\Model;
 class ParseInfo
 {
     /** @var string */
+    private $namespace;
+
+    /** @var string */
     private $className;
 
     /** @var array */
@@ -54,4 +57,21 @@ class ParseInfo
     {
         $this->constructor = $constructorFound;
     }
+
+    /**
+     * @return string
+     */
+    public function getNamespace(): string
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @param string $namespace
+     */
+    public function setNamespace(string $namespace): void
+    {
+        $this->namespace = $namespace;
+    }
+
 }
