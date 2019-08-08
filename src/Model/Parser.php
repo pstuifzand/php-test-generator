@@ -35,11 +35,6 @@ class Parser
 
         $start = $classIndex + 3;
         while ($start != count($tokens)) {
-            $commentIndex = Parser::findToken($tokens, $start, count($tokens), T_DOC_COMMENT);
-            if ($commentIndex !== count($tokens)) {
-                $parsedComment = Parser::parseComment($tokens[$commentIndex][1]);
-                $start         = $commentIndex + 1;
-            }
             $publicIndex = Parser::findToken($tokens, $start, count($tokens), T_PUBLIC);
             if ($publicIndex === count($tokens)) {
                 break;
@@ -52,6 +47,11 @@ class Parser
                 }
                 if ($tokens[$stringIndex][1] === '__construct') {
                     $constructorFound = true;
+
+                    $commentIndex = Parser::findTokenBackward($tokens, $start, $publicIndex, T_DOC_COMMENT);
+                    if ($commentIndex !== $start) {
+                        $parsedComment = Parser::parseComment($tokens[$commentIndex][1]);
+                    }
                     break;
                 }
                 $start = $stringIndex + 1;
@@ -111,6 +111,19 @@ class Parser
 
         return $first;
     }
+
+    private static function findTokenBackward(array $tokens, int $first, int $last, int $type)
+    {
+        do {
+            $last--;
+            if (self::isTokenType($tokens, $last, $type)) {
+                break;
+            }
+        } while ($first !== $last);
+
+        return $last;
+    }
+
 
     private static function distance(array $tokens, int $from, int $to)
     {
