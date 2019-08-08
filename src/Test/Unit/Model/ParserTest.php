@@ -2,9 +2,10 @@
 
 namespace Stuifzand\TestGenerator\Test\Unit\Model;
 
+use PHPUnit\Framework\TestCase;
 use Stuifzand\TestGenerator\Model\Parser;
 
-class ParserTest extends \PHPUnit\Framework\TestCase
+class ParserTest extends TestCase
 {
     /** @var Parser */
     private $parser;
@@ -65,11 +66,11 @@ class ParserTest extends \PHPUnit\Framework\TestCase
     public function dataProviderNamespacesAndClass()
     {
         return [
-            ['Guapa', 'Order'],
-            ['Guapa\\Import2', 'OrderItemConverter'],
-            ['Guapa\\Import3\\Model', 'Product'],
-            ['Guapa\\Import4\\Model\\Api', 'Project'],
-            ['Guapa\\Import5\\Test\\Test\\Test\\Test', 'Item'],
+            ['Stuifzand', 'Order'],
+            ['Stuifzand\\Import2', 'OrderItemConverter'],
+            ['Stuifzand\\Import3\\Model', 'Product'],
+            ['Stuifzand\\Import4\\Model\\Api', 'Project'],
+            ['Stuifzand\\Import5\\Test\\Test\\Test\\Test', 'Item'],
         ];
     }
 }
