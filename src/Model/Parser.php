@@ -6,7 +6,7 @@ class Parser
 {
     /**
      * @param string $classText
-     * @return ParseInfo
+     * @return \Stuifzand\TestGenerator\Model\ParseInfo
      */
     public function parse(string $classText)
     {
@@ -112,6 +112,13 @@ class Parser
         return $first;
     }
 
+    /**
+     * @param array $tokens
+     * @param int $first
+     * @param int $last
+     * @param int $type
+     * @return int
+     */
     private static function findTokenBackward(array $tokens, int $first, int $last, int $type)
     {
         do {
@@ -125,6 +132,12 @@ class Parser
     }
 
 
+    /**
+     * @param array $tokens
+     * @param int $from
+     * @param int $to
+     * @return int
+     */
     private static function distance(array $tokens, int $from, int $to)
     {
         $distance = 0;
@@ -154,6 +167,10 @@ class Parser
         return is_array($token) && $token[0] === $type;
     }
 
+    /**
+     * @param string $commentText
+     * @return array
+     */
     private static function parseComment($commentText)
     {
         if (preg_match('#^/\*\*#', $commentText)) {
