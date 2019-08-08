@@ -73,6 +73,27 @@ PHP;
         $this->assertEquals([], $info->getConstructorArguments());
     }
 
+    public function testParser_PHPDoc()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    /**
+     */
+    public function __construct() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
+        $this->assertEquals([], $info->getConstructorArguments());
+        $this->assertEquals('', $this->getConstructorComment());
+    }
+
     public function dataProviderClassNames()
     {
         return [
@@ -94,6 +115,11 @@ PHP;
             ['Stuifzand\\Import4\\Model\\Api', 'Project'],
             ['Stuifzand\\Import5\\Test\\Test\\Test\\Test', 'Item'],
         ];
+    }
+
+    private function getConstructorComment()
+    {
+        return '';
     }
 }
 
