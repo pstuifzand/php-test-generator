@@ -25,6 +25,7 @@ class ParserTest extends TestCase
         $classText = "<?php class {$className} {}";
         $info      = $this->parser->parse($classText);
 
+        $this->assertFalse($info->hasConstructor());
         $this->assertEquals($className, $info->getClassName());
     }
 
@@ -37,6 +38,7 @@ class ParserTest extends TestCase
         $classText = "<?php use Test\Test\Test; class {$className} {}";
         $info      = $this->parser->parse($classText);
 
+        $this->assertFalse($info->hasConstructor());
         $this->assertEquals($className, $info->getClassName());
     }
 
@@ -49,6 +51,7 @@ class ParserTest extends TestCase
     {
         $classText = "<?php namespace $namespace; class {$className} {}";
         $info      = $this->parser->parse($classText);
+        $this->assertFalse($info->hasConstructor());
         $this->assertEquals('\\' . $namespace . '\\' . $className, $info->getClassName());
     }
 
@@ -66,24 +69,8 @@ PHP;
         $info = $this->parser->parse($classText);
 
         $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
         $this->assertEquals([], $info->getConstructorArguments());
-    }
-
-    public function testParser_ClassOneArgumentConstructor()
-    {
-        $classText = <<<PHP
-<?php namespace Test;
-class Parser
-{
-    public function __construct(Parser \$parser) {}
-}
-PHP;
-
-        /** @var ParseInfo $info */
-        $info = $this->parser->parse($classText);
-
-        $this->assertEquals('\\Test\\Parser', $info->getClassName());
-        $this->assertCount(1, $info->getConstructorArguments());
     }
 
     public function dataProviderClassNames()

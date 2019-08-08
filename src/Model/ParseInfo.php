@@ -11,6 +11,11 @@ class ParseInfo
     private $constructorArguments = [];
 
     /**
+     * @var bool
+     */
+    private $constructor;
+
+    /**
      * @return string
      */
     public function getClassName(): string
@@ -40,5 +45,15 @@ class ParseInfo
     public function setConstructorArguments(array $constructorArguments): void
     {
         $this->constructorArguments = $constructorArguments;
+    }
+
+    public function hasConstructor()
+    {
+        return $this->constructor;
+    }
+
+    public function setConstructor(bool $constructorFound)
+    {
+        $this->constructor = $constructorFound;
     }
 }

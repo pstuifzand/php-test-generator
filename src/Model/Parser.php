@@ -23,8 +23,35 @@ class Parser
             $ns = $this->getNamespace($tokens, $nsIndex + 2);
         }
 
-        $classIndex = Parser::findToken($tokens, $nsIndex, count($tokens), T_CLASS);
-        $info->setClassName($ns . $tokens[$classIndex + 2][1]);
+        $classIndex  = Parser::findToken($tokens, $nsIndex, count($tokens), T_CLASS);
+        $stringIndex = Parser::findToken($tokens, $classIndex, count($tokens), T_STRING);
+        $info->setClassName($ns . $tokens[$stringIndex][1]);
+
+        $constructorFound = false;
+
+        $start = $classIndex + 3;
+        while ($start != count($tokens)) {
+            $publicIndex = Parser::findToken($tokens, $start, count($tokens), T_PUBLIC);
+            if ($publicIndex === count($tokens)) {
+                break;
+            }
+            $functionIndex = Parser::findToken($tokens, $publicIndex, count($tokens), T_FUNCTION);
+            if (Parser::distance($tokens, $publicIndex, $functionIndex) == 1) { // skip whitespace and comments?
+                $stringIndex = Parser::findToken($tokens, $functionIndex, count($tokens), T_STRING);
+                if ($stringIndex == count($tokens)) {
+                    break;
+                }
+                if ($tokens[$stringIndex][1] === '__construct') {
+                    $constructorFound = true;
+                    break;
+                }
+                $start = $stringIndex + 1;
+            } else {
+                $start = $publicIndex + 1;
+            }
+        }
+
+        $info->setConstructor($constructorFound);
 
         return $info;
     }
@@ -60,6 +87,10 @@ class Parser
     private static function findToken(array $tokens, int $first, int $last, int $type)
     {
         while ($first != $last) {
+            if (Parser::isTokenType($tokens, $first, T_WHITESPACE)) {
+                $first++;
+                continue;
+            }
             if (Parser::isTokenType($tokens, $first, $type)) {
                 break;
             }
@@ -67,6 +98,22 @@ class Parser
         }
 
         return $first;
+    }
+
+    private static function distance(array $tokens, int $from, int $to)
+    {
+        $distance = 0;
+
+        while ($from != $to) {
+            if (Parser::isTokenType($tokens, $from, T_WHITESPACE)) {
+                $from++;
+                continue;
+            }
+            $from++;
+            $distance++;
+        }
+
+        return $distance;
     }
 
     /**
@@ -78,7 +125,6 @@ class Parser
     private static function isTokenType(array $tokens, int $first, int $type): bool
     {
         $token = $tokens[$first];
-
         return is_array($token) && $token[0] === $type;
     }
 }
