@@ -94,6 +94,56 @@ PHP;
         $this->assertEquals('', $this->getConstructorComment());
     }
 
+    public function testParser_PHPDocTwoMethods()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    /**
+     */
+    public function __construct() {}
+    
+    /**
+     */
+    public function method1() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
+        $this->assertEquals([], $info->getConstructorArguments());
+        $this->assertEquals('', $this->getConstructorComment());
+    }
+
+    public function testParser_PHPDocTwoMethods_Switched()
+    {
+        $classText = <<<PHP
+<?php namespace Test;
+class Parser
+{
+    /**
+     */
+    public function method1() {}
+    
+    /**
+     */
+    public function __construct() {}
+}
+PHP;
+
+        /** @var ParseInfo $info */
+        $info = $this->parser->parse($classText);
+
+        $this->assertEquals('\\Test\\Parser', $info->getClassName());
+        $this->assertTrue($info->hasConstructor());
+        $this->assertEquals([], $info->getConstructorArguments());
+        $this->assertEquals('', $this->getConstructorComment());
+    }
+
     public function dataProviderClassNames()
     {
         return [
