@@ -15,7 +15,7 @@ repos:
     - id: php-unit
     - id: php-cs
       files: \.(php)$
-      args: [--standard=PSR1 -p]
+      args: [--standard=PSR2 -p]
     - id: php-cbf
       files: \.(php)$
-      args: [--standard=PSR1 -p]
+      args: [--standard=PSR2 -p]

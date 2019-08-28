@@ -20,7 +20,7 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderClassNames
      */
-    public function testParser_SimpleClass(string $className)
+    public function testParserSimpleClass(string $className)
     {
         $classText = "<?php class {$className} {}";
         $info      = $this->parser->parse($classText);
@@ -33,7 +33,7 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderClassNames
      */
-    public function testParser_ClassWithUse(string $className)
+    public function testParserClassWithUse(string $className)
     {
         $classText = "<?php use Test\Test\Test; class {$className} {}";
         $info      = $this->parser->parse($classText);
@@ -47,7 +47,7 @@ class ParserTest extends TestCase
      * @param string $className
      * @dataProvider dataProviderNamespacesAndClass
      */
-    public function testParser_ClassWithNamespace(string $namespace, string $className)
+    public function testParserClassWithNamespace(string $namespace, string $className)
     {
         $classText = "<?php namespace $namespace; class {$className} {}";
         $info      = $this->parser->parse($classText);
@@ -55,7 +55,7 @@ class ParserTest extends TestCase
         $this->assertEquals('\\' . $namespace . '\\' . $className, $info->getClassName());
     }
 
-    public function testParser_ClassEmptyConstructor()
+    public function testParserClassEmptyConstructor()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -73,7 +73,7 @@ PHP;
         $this->assertEquals([], $info->getConstructorArguments());
     }
 
-    public function testParser_PHPDoc()
+    public function testParserPHPDoc()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -93,7 +93,7 @@ PHP;
         $this->assertEquals([], $info->getConstructorArguments());
     }
 
-    public function testParser_PHPDocTwoMethods()
+    public function testParserPHPDocTwoMethods()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -102,7 +102,7 @@ class Parser
     /**
      */
     public function __construct() {}
-    
+
     /**
      */
     public function method1() {}
@@ -117,7 +117,7 @@ PHP;
         $this->assertEquals([], $info->getConstructorArguments());
     }
 
-    public function testParser_PHPDocTwoMethods_Switched()
+    public function testParserPHPDocTwoMethodsSwitched()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -126,7 +126,7 @@ class Parser
     /**
      */
     public function method1() {}
-    
+
     /**
      */
     public function __construct() {}
@@ -141,7 +141,7 @@ PHP;
         $this->assertEquals([], $info->getConstructorArguments());
     }
 
-    public function testParser_PHPDocTwoMethods_OneParam()
+    public function testParserPHPDocTwoMethodsOneParam()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -151,7 +151,7 @@ class Parser
      * @param \Magento\Sales\Model\Order \$order
      */
     public function __construct(\$order) {}
-    
+
     /**
      */
     public function method1() {}
@@ -168,7 +168,7 @@ PHP;
         ], $info->getConstructorArguments());
     }
 
-    public function testParser_PHPDocTwoMethods_TwoParams()
+    public function testParserPHPDocTwoMethodsTwoParams()
     {
         $classText = <<<PHP
 <?php namespace Test;
@@ -179,7 +179,7 @@ class Parser
      * @param \Magento\Sales\Api\OrderRepositoryInterface \$orderRepository
      */
     public function __construct(\$orderFactory, \$repo) {}
-    
+
     /**
      */
     public function method1() {}
@@ -221,4 +221,3 @@ PHP;
         ];
     }
 }
-
