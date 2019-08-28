@@ -155,7 +155,7 @@ class Generator
      */
     private function emitObjectManagerGet(ParseInfo $info): void
     {
-        echo "\$this->objectManager->get({$info->getClassName()}::class, [\n";
+        echo "\$this->objectManager->getObject({$info->getClassName()}::class, [\n";
         foreach ($info->getConstructorArguments() as $argument) {
             echo "             '{$argument[1]}' => \$this->{$argument[1]},\n";
         }
