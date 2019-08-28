@@ -120,7 +120,7 @@ class Generator
      */
     private function emitFieldAssignment(string $fieldName, $code): void
     {
-        echo "         \$this->" . $fieldName . " = ";
+        echo "        \$this->" . $fieldName . " = ";
         if (is_callable($code)) {
             call_user_func($code);
         } else {
@@ -157,9 +157,9 @@ class Generator
     {
         echo "\$this->objectManager->getObject({$info->getClassName()}::class, [\n";
         foreach ($info->getConstructorArguments() as $argument) {
-            echo "             '{$argument[1]}' => \$this->{$argument[1]},\n";
+            echo "            '{$argument[1]}' => \$this->{$argument[1]},\n";
         }
-        echo "         ])";
+        echo "        ])";
     }
 
     /**
